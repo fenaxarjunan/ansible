@@ -1,0 +1,23 @@
+---
+-name: "Apache Installation"
+ become: true
+ hosts: amazon
+ tasks:
+
+    -name: "Install httpd"
+     yum:
+        name: httpd
+        state: present
+    
+    -name: "Copy website Files"
+     copy:
+        src: website/
+        dest: /var/wwww/html/
+        owner: apache
+        group: apache
+
+    -name: "Restart webserver"
+     service:
+        name: httpd
+        state: restarted
+        enabled: true    

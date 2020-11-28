@@ -1,0 +1,31 @@
+---
+- name: "LAMP Installation"
+  become: true
+  hosts: all
+  tasks:
+
+    - name: "Install LAMP"
+      yum:
+        name: 
+            - httpd
+            - php
+            - php-mysql
+            - mariadb-server
+        state: present    
+    
+    - name: "Create content"
+      copy:
+        content: "<?php phpinfo(); ?>"
+        dest: /var/www/html/index.php
+        group: apache
+        owner: apache
+
+
+    - name: "Restart LAMP"
+      service:
+        name: "{{ item }}"
+        state: restarted
+        enabled: true
+      with_items:
+        - httpd
+        - mariadb
